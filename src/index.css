@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --bg: #050807;
+  --bg-soft: #0b1110;
+  --card: #101817;
+  --card-strong: #111d1b;
+  --accent: #63f542;
+  --accent-strong: #35c759;
+  --text: #ffffff;
+  --muted: #a7b0ac;
+  --border: #25302b;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.32);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(99, 245, 66, 0.08), transparent 30%),
+    #050807;
+  color: var(--text);
+  font-family: Inter, 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+@layer components {
+  .panel {
+    @apply rounded-2xl border border-[#25302b] bg-[#101817] shadow-[0_10px_30px_rgba(0,0,0,0.28)];
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-[#63F542] px-5 py-3 text-sm font-bold text-[#07140d] transition hover:bg-[#87ff6c] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#63F542] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050807];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-[#26322f] bg-[#0b1110] px-5 py-3 text-sm font-semibold text-white transition hover:border-[#63F542] hover:text-[#63F542];
+  }
+
+  .input-shell {
+    @apply w-full rounded-xl border border-[#25302b] bg-[#0b1110] px-4 py-3 text-sm text-white placeholder:text-[#787f7a] outline-none transition focus:border-[#63F542];
+  }
+}

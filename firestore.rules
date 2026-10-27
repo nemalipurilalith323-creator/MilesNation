@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function hasRole(role) {
+      return isSignedIn() && request.auth.token.role == role;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn() && (isOwner(userId) || hasRole('administrator'));
+      allow create: if isSignedIn() && request.auth.uid == userId && request.resource.data.role == 'participant';
+      allow update: if isSignedIn() && isOwner(userId) && request.resource.data.role == 'participant';
+      allow delete: if false;
+    }
+
+    match /events/{eventId} {
+      allow read: if resource.data.status == 'Published' || hasRole('administrator');
+      allow create, update, delete: if hasRole('administrator');
+    }
+
+    match /registrations/{registrationId} {
+      allow read: if isSignedIn() && (
+        resource.data.userId == request.auth.uid || hasRole('administrator')
+      );
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && (
+        (resource.data.userId == request.auth.uid && !('paymentStatus' in request.resource.data)) ||
+        hasRole('administrator')
+      );
+      allow delete: if false;
+    }
+
+    match /submissions/{submissionId} {
+      allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || hasRole('administrator'));
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() && (
+        (resource.data.userId == request.auth.uid && request.resource.data.status == 'Pending') ||
+        hasRole('administrator')
+      );
+      allow delete: if false;
+    }
+
+    match /leaderboards/{leaderboardId} {
+      allow read: if true;
+      allow write: if hasRole('administrator');
+    }
+
+    match /achievements/{achievementId} {
+      allow read: if true;
+      allow write: if hasRole('administrator');
+    }
+
+    match /users/{userId}/earnedAchievements/{achievementId} {
+      allow read: if isSignedIn() && (isOwner(userId) || hasRole('administrator'));
+      allow write: if hasRole('administrator');
+    }
+
+    match /auditLogs/{logId} {
+      allow read: if hasRole('administrator');
+      allow write: if hasRole('administrator');
+    }
+  }
+}

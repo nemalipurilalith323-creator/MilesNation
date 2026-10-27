@@ -1,0 +1,16 @@
+{
+  "name": "milesnation-functions",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.3.2",
+    "razorpay": "^2.9.5"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
